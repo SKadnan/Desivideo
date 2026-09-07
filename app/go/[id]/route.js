@@ -1,10 +1,11 @@
+
 import { NextResponse } from 'next/server';
 
 // Yahan aap apne sare Google Docs ya target links add kar sakte hain
 const targetUrls = {
-  'doc1': 'https://docs.google.com/document/d/YOUR_DOC_ID_1/edit',
-  'doc2': 'https://docs.google.com/document/d/YOUR_DOC_ID_2/edit',
-  'link1': 'https://e.urlxx233.com/?utm_source=Raees&utm_medium=Gama'
+  "doc1": "https://docs.google.com/document/d/YOUR_DOC_ID_1/edit",
+  "doc2": "https://docs.google.com/document/d/YOUR_DOC_ID_2/edit",
+  "link1": "https://i.urlxx335.com/?utm_source=Raees&utm_medium=Gama"
 };
 
 export async function GET(request, { params }) {
