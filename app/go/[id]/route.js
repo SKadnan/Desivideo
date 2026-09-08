@@ -1,7 +1,6 @@
-
 import { NextResponse } from 'next/server';
 
-// Yahan aap apne sare Google Docs ya target links add kar sakte hain
+// Aapke saare target links aur Google Docs Yahan add honge
 const targetUrls = {
   "doc1": "https://docs.google.com/document/d/YOUR_DOC_ID_1/edit",
   "doc2": "https://docs.google.com/document/d/YOUR_DOC_ID_2/edit",
@@ -14,10 +13,21 @@ export async function GET(request, { params }) {
   const destination = targetUrls[id];
 
   if (destination) {
-    // Fast 307 Redirect (Bypasses Link Shim delays)
-    return NextResponse.redirect(destination, 307);
+    // Incoming URL ke saare query parameters (jaise ?utm_source=fb) forward karne ke liye
+    const { search } = new URL(request.url);
+    const finalUrl = `${destination}${search}`;
+
+    // Fast 307 Redirect + Caching disable taaki link instantly redirect ho aur social bots capture na karein
+    return NextResponse.redirect(finalUrl, {
+      status: 307,
+      headers: {
+        'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0',
+      },
+    });
   }
 
-  // Agar link na mile toh homepage par bhej do
-  return NextResponse.redirect(new URL('/', request.url));
+  // Agar link ID na mile toh homepage par bhej do
+  return NextResponse.redirect(new URL('/', request.url), 307);
 }
