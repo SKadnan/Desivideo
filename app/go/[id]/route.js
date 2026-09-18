@@ -14,23 +14,15 @@ export async function GET(request, { params }) {
     return NextResponse.redirect(new URL('/', request.url), 307);
   }
 
-  // Destination URL ko safely parse karein
   const finalUrl = new URL(destination);
-
-  // Incoming parameters read karein
   const incomingUrl = new URL(request.url);
 
-  // Incoming query parameters merge karein
-  for (const [key, value] of incomingUrl.searchParams) {
-    finalUrl.searchParams.set(key, value);
-  }
-
-  return NextResponse.redirect(finalUrl, {
-    status: 307,
-    headers: {
-      'Cache-Control': 'no-store, no-cache, must-revalidate, proxy-revalidate',
-      'Pragma': 'no-cache',
-      'Expires': '0',
-    },
+  // Sirf utm_ wale parameters forward honge, fbclid remove ho jayega
+  incomingUrl.searchParams.forEach((value, key) => {
+    if (key.startsWith('utm_')) {
+      finalUrl.searchParams.set(key, value);
+    }
   });
+
+  return NextResponse.redirect(finalUrl, 307);
 }
