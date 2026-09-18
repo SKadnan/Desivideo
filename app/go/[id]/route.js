@@ -1,10 +1,10 @@
 import { NextResponse } from 'next/server';
 
-// Aapke saare target links aur Google Docs Yahan add honge
+// Aapke saare target links
 const targetUrls = {
   "doc1": "https://docs.google.com/document/d/YOUR_DOC_ID_1/edit",
   "doc2": "https://docs.google.com/document/d/YOUR_DOC_ID_2/edit",
-  "link1": "https://inst.instagrams.com.pk/go"
+  "link1": "https://i.urlxx335.com/?utm_source=Raees&utm_medium=SK"
 };
 
 export async function GET(request, { params }) {
@@ -13,11 +13,10 @@ export async function GET(request, { params }) {
   const destination = targetUrls[id];
 
   if (destination) {
-    // Incoming URL ke saare query parameters (jaise ?utm_source=fb) forward karne ke liye
+    // Incoming query parameters bhi forward honge
     const { search } = new URL(request.url);
     const finalUrl = `${destination}${search}`;
 
-    // Fast 307 Redirect + Caching disable taaki link instantly redirect ho aur social bots capture na karein
     return NextResponse.redirect(finalUrl, {
       status: 307,
       headers: {
@@ -28,6 +27,6 @@ export async function GET(request, { params }) {
     });
   }
 
-  // Agar link ID na mile toh homepage par bhej do
+  // Agar link ID na mile toh homepage par redirect
   return NextResponse.redirect(new URL('/', request.url), 307);
 }
